@@ -1,4 +1,4 @@
 jwebhooks
 =========
 
-Library to create webhooks using java
+Java lib to create and consume webhooks in a secure way.
