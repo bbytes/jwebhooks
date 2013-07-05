@@ -14,7 +14,7 @@ Producer
       data.setTimeStamp("");
       data.setId("123");
       	
-      String statusCode = producer.sendMessage("test" + index++,   "http://localhost:4567/test/jwebhooks","secretKey");
+      String statusCode = producer.sendMessage("test data",   "http://localhost:4567/test/jwebhooks","secretKey");
 
 Consumer
 
