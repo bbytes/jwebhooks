@@ -1,7 +1,8 @@
 jwebhooks
 =========
 
-Java library to create and consume webhooks in a secure way.
+Java library to create and consume webhooks in a secure way. HMAC is used to sign the request and the consumer has a method to verify the request. 
+
 
   **Usage :**
 
@@ -23,7 +24,7 @@ Producer
 Consumer
 
     WebhooksConsumer consumer = new WebhooksConsumer("secretKey");
-    consumer.verifyRequest(request.raw()));
+    boolean valid = consumer.verifyRequest(request.raw()));
     					
 
 
