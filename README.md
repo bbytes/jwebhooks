@@ -28,3 +28,7 @@ Consumer
     					
 
 
+To Do :
+
+1. Add date to header and check if the request is not older than 30 secs
+2. Add nonce to header to avoid replay attack
