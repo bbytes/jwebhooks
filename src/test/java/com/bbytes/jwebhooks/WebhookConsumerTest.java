@@ -50,7 +50,7 @@ public class WebhookConsumerTest {
 	}
 
 	@Test
-	public void testSendRequest() throws Exception {
+	public void testSendRequestToConsumer() throws Exception {
 		producer = WebhooksProducer.getInstance();
 		producer.setTimeOut(1000);
 		final WebhooksData data = new WebhooksData();

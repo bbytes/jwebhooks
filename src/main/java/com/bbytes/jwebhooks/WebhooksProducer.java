@@ -130,6 +130,47 @@ public class WebhooksProducer {
 
 	/**
 	 * <p>
+	 * Send message using httpClient without encryption
+	 * </p>
+	 * 
+	 * @param message
+	 *            to be sent in request body
+	 * @param postURL
+	 *            the url to which the request is posted - webhook url
+	 * @return status code
+	 * @throws Exception
+	 */
+	public int sendMessage(String message, String postURL) throws Exception {
+
+		int statusCode = 0;
+		HttpPost postRequest = new HttpPost(postURL);
+
+		try {
+			StringEntity input = new StringEntity(message);
+			input.setContentType("application/json");
+			postRequest.setEntity(input);
+
+			HttpResponse httpResponse;
+
+			httpResponse = httpClient.execute(postRequest);
+			statusCode = httpResponse.getStatusLine().getStatusCode();
+			EntityUtils.consume(httpResponse.getEntity());
+			if (statusCode != HttpStatus.SC_OK) {
+				log.error("Error Server URL " + postRequest.getURI().getPath() + " return status code " + statusCode);
+				throw new HttpResponseException(statusCode, "Status code not 200 but" + statusCode);
+			}
+
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new Exception("Error in webhook producer", e);
+		} finally {
+			postRequest.releaseConnection();
+		}
+		return statusCode;
+	}
+	
+	/**
+	 * <p>
 	 * Send message using httpClient.
 	 * </p>
 	 * 
@@ -150,6 +191,34 @@ public class WebhooksProducer {
 			ObjectMapper mapper = new ObjectMapper();
 			String payLoad = mapper.writeValueAsString(data);
 			return sendMessage(payLoad, postURL, secretKey);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			throw new Exception("Error in webhook producer", e);
+		}
+	}
+	
+	/**
+	 * <p>
+	 * Send message using httpClient without encryption
+	 * </p>
+	 * 
+	 * @param data
+	 *            to be sent in request body
+	 * @param postURL
+	 *            the url to which the request is posted - webhook url
+	 * @param secretKey
+	 *            the key used to sign the content using hmac algo
+	 * @return status code
+	 * @throws Exception
+	 */
+	public int sendMessage(WebhooksData data, String postURL) throws Exception {
+		if (data == null)
+			throw new IllegalArgumentException("Webhook Data cannot be null");
+
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			String payLoad = mapper.writeValueAsString(data);
+			return sendMessage(payLoad, postURL);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw new Exception("Error in webhook producer", e);
